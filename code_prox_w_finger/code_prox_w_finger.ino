@@ -76,14 +76,23 @@ void setup()
 void loop()                     // run over and over again
 {  
   //don't ned to run this at full speed.
-  do{
    Serial.print("-------------------------\n");
-   Serial.println(hc1.dist());
+
+   float distancia = hc1.dist();
+
+   Serial.println(distancia);
+
+      
+   if(distancia<20.0){
    
-   if(hc1.dist()<20){
-   getFingerprintID(); 
+   Serial.println("activo huella");
+    delay(100);
+   getFingerprintID();
+  
+   }else{
+    Serial.println("no esta");
     }
-  }while(true);
+
     
     
     //don't ned to run this at full speed.

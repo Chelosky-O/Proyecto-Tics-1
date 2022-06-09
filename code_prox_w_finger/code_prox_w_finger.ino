@@ -1,19 +1,3 @@
-/***************************************************
-  This is an example sketch for our optical Fingerprint sensor
-
-  Designed specifically to work with the Adafruit BMP085 Breakout
-  ----> http://www.adafruit.com/products/751
-
-  These displays use TTL Serial to communicate, 2 pins are required to
-  interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
-
 #include <HCSR04.h>
 #include <Adafruit_Fingerprint.h>
 #include <Wire.h>
@@ -23,7 +7,7 @@
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
 // Set up the serial port to use softwareserial..
-SoftwareSerial mySerial(2, 3);
+SoftwareSerial mySerial(9, 8);
 
 #else 
 // On Leonardo/M0/etc, others with hardware serial, use hardware serial!
@@ -77,23 +61,9 @@ void loop()                     // run over and over again
 {  
   //don't ned to run this at full speed.
    Serial.print("-------------------------\n");
-
-   float distancia = hc1.dist();
-
-   Serial.println(distancia);
-
-      
-   if(distancia<20.0){
+   Serial.println(hc1.dist());
    
-   Serial.println("activo huella");
-    delay(100);
-   getFingerprintID();
-  
-   }else{
-    Serial.println("no esta");
-    }
-
-    
+   getFingerprintID(); 
     
     //don't ned to run this at full speed.
    delay(1000); 

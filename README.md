@@ -1,2 +1,3 @@
-# Proyecto-Tics-1
-Hola buenas tardes :)
+# Sistema de Autorizacion Sanitario (SAS)
+
+Tecnologias: PHP, MySQL, HTML

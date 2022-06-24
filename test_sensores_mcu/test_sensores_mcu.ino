@@ -1,4 +1,4 @@
-#include <HCSR04.h>
+  #include <HCSR04.h>
 #include <Wire.h>
 #include <Adafruit_MLX90614.h>
 #include <Adafruit_Fingerprint.h>
@@ -33,6 +33,10 @@ RX -> PIN 8 blanco
 led
 6 rojo
 7 verde
+-------------
+agregar persona
+Boton 5v, Pin 11
+Led pin 1
 */
 
 SoftwareSerial NodeMCU(2,3); //pin 2 y 3, comunicacion serial con el nodeMcu, verificar si hay que cambiar los pines
@@ -45,6 +49,10 @@ HCSR04 hc2(12, 13);
 
 const int ledrojo = 6;
 const int ledverde = 7;
+const int ledadd = 10;
+const int buttonPin  = 11;
+
+
 
 const int rele = 4;
 
@@ -82,6 +90,9 @@ void setup(){
   //leds
   pinMode(ledrojo,OUTPUT);
   pinMode(ledverde,OUTPUT);
+
+  //button
+  pinMode(buttonPin, INPUT);
 
   //huellas
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -176,23 +187,30 @@ uint8_t readnumber(void) {
 void add_huella(){
   Serial.println("Ready to enroll a fingerprint!");
   Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
-  id = readnumber();
+  id = finger.templateCount+1;
   if (id == 0) {// ID #0 not allowed, try again!
      return;
   }
   Serial.print("Enrolling ID #");
   Serial.println(id);
-
+  digitalWrite(ledadd,HIGH);
   while (!  getFingerprintEnroll() );
+  digitalWrite(ledadd,LOW);
+  delay(500);
+  digitalWrite(ledadd,HIGH);
+  delay(500);
+  digitalWrite(ledadd,LOW);
   
   };
 
 
+bool button_debounce = false;
+
 void loop(){
   distancias();
   leer_huella();
+  
   //temperatura_persona();
-
   
   delay(1000);                        // we suggest to use over 60ms measurement cycle, in order to prevent trigger signal to the echo signal.
 
@@ -270,11 +288,11 @@ uint8_t getFingerprintID() {
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID);
   if(finger.fingerID < 10 && finger.fingerID > 0){
-    NodeMCU.println("h " + '0' + '0' + finger.fingerID);   //enviaria el dato de la huella si detecta un match
+    NodeMCU.println("h " +String(0)+String(0)+ String(finger.fingerID));   //enviaria el dato de la huella si detecta un match
   }else if(finger.fingerID > 10 && finger.fingerID < 100){
-    NodeMCU.println("h " + '0' + finger.fingerID);   //enviaria el dato de la huella si detecta un match
+    NodeMCU.println("h " +String(0)+String(0)+ String(finger.fingerID));   //enviaria el dato de la huella si detecta un match
   }else{
-      NodeMCU.println("h " + finger.fingerID);   //enviaria el dato de la huella si detecta un match
+    NodeMCU.println("h "+ finger.fingerID);   //enviaria el dato de la huella si detecta un match
   }
   
   Serial.print(" with confidence of "); Serial.println(finger.confidence);

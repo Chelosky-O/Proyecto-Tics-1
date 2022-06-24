@@ -36,7 +36,7 @@ led
 -------------
 agregar persona
 Boton 5v, Pin 11
-Led pin 1
+Led pin 10
 */
 
 SoftwareSerial NodeMCU(2,3); //pin 2 y 3, comunicacion serial con el nodeMcu, verificar si hay que cambiar los pines
@@ -44,7 +44,7 @@ SoftwareSerial NodeMCU(2,3); //pin 2 y 3, comunicacion serial con el nodeMcu, ve
 Adafruit_MLX90614 termometroIR = Adafruit_MLX90614();
 
 //HCSR04 hc(13, new int[2]{2,3}, 2); //initialisation class HCSR04 (trig pin , echo pin, number of sensor)
-HCSR04 hc1(11, 5);
+//HCSR04 hc1(11, 5);
 HCSR04 hc2(12, 13);
 
 const int ledrojo = 6;
@@ -90,6 +90,7 @@ void setup(){
   //leds
   pinMode(ledrojo,OUTPUT);
   pinMode(ledverde,OUTPUT);
+  pinMode(ledadd,OUTPUT);
 
   
 
@@ -133,10 +134,10 @@ void setup(){
 
 void distancias(){
   Serial.print("-------------------------\n");
-  float distancia_1 = hc1.dist();
+  //float distancia_1 = hc1.dist();
   float distancia_2 = hc2.dist(); // para sacar alcohol
   
-  Serial.println("hc1: " + String(distancia_1,3));
+  //Serial.println("hc1: " + String(distancia_1,3));
   Serial.println("hc2: " + String(distancia_2,3));
 
   if(distancia_2 < 5.0 ){
@@ -148,9 +149,9 @@ void distancias(){
     digitalWrite(rele, LOW);
    }
 
-   if(distancia_1 < 3.0){
+   /*if(distancia_1 < 3.0){
     Serial.println("Boton Apretado");
-    }
+    }*/
 
   }
 

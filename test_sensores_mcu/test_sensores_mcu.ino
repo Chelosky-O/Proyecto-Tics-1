@@ -11,7 +11,7 @@ HC1 -> Nivel alcohol Gel //este no lo usaremos en esta ocacion
 HC2 -> Para tomar alcohol Gel
 5V
 HC1 TRG=12 ECHO=13
-HC2 TRG=10 ECHO=11
+HC2 TRG=5 ECHO=11
 ----------
 RELE:
 5V
@@ -44,13 +44,13 @@ SoftwareSerial NodeMCU(2,3); //pin 2 y 3, comunicacion serial con el nodeMcu, ve
 Adafruit_MLX90614 termometroIR = Adafruit_MLX90614();
 
 //HCSR04 hc(13, new int[2]{2,3}, 2); //initialisation class HCSR04 (trig pin , echo pin, number of sensor)
-HCSR04 hc1(10, 11);
+HCSR04 hc1(11, 5);
 HCSR04 hc2(12, 13);
 
 const int ledrojo = 6;
 const int ledverde = 7;
 const int ledadd = 10;
-const int buttonPin  = 11;
+const int buttonPin  = 5;
 
 
 
@@ -91,8 +91,7 @@ void setup(){
   pinMode(ledrojo,OUTPUT);
   pinMode(ledverde,OUTPUT);
 
-  //button
-  pinMode(buttonPin, INPUT);
+  
 
   //huellas
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -129,7 +128,6 @@ void setup(){
       Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
   }
 
-
   
 }
 
@@ -149,6 +147,10 @@ void distancias(){
   }else{
     digitalWrite(rele, LOW);
    }
+
+   if(distancia_1 < 3.0){
+    Serial.println("Boton Apretado");
+    }
 
   }
 
@@ -208,11 +210,15 @@ bool button_debounce = false;
 
 void loop(){
   distancias();
-  leer_huella();
-  
+  //leer_huella();
+
+
+
+
+    
   //temperatura_persona();
   
-  delay(1000);                        // we suggest to use over 60ms measurement cycle, in order to prevent trigger signal to the echo signal.
+  //delay(1000);                        // we suggest to use over 60ms measurement cycle, in order to prevent trigger signal to the echo signal.
 
 
 }

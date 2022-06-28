@@ -211,7 +211,7 @@ bool button_debounce = false;
 
 void loop(){
   distancias();
-  //leer_huella();
+  leer_huella();
 
 
 

@@ -1,4 +1,4 @@
-  #include <HCSR04.h>
+#include <HCSR04.h>
 #include <Wire.h>
 #include <Adafruit_MLX90614.h>
 #include <Adafruit_Fingerprint.h>
@@ -35,7 +35,7 @@ led
 7 verde
 -------------
 agregar persona
-Boton 5v, Pin 11
+Boton 5v, Pin 5
 Led pin 10
 */
 
@@ -74,8 +74,14 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 uint8_t id;
 //SERIALMCU
 
+int Reset = 11;
 
 void setup(){ 
+
+  digitalWrite(Reset, HIGH);
+  delay(200); 
+  pinMode(Reset, OUTPUT);  
+  
   // Iniciar comunicación serie
   Serial.begin(9600); //comunicacion del
   
@@ -91,8 +97,7 @@ void setup(){
   pinMode(ledrojo,OUTPUT);
   pinMode(ledverde,OUTPUT);
   pinMode(ledadd,OUTPUT);
-
-  
+  pinMode(buttonPin, INPUT);
 
   //huellas
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -187,6 +192,7 @@ uint8_t readnumber(void) {
   return num;
 }
 
+
 void add_huella(){
   Serial.println("Ready to enroll a fingerprint!");
   Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
@@ -203,8 +209,9 @@ void add_huella(){
   digitalWrite(ledadd,HIGH);
   delay(500);
   digitalWrite(ledadd,LOW);
-  
+  //digitalWrite(Reset, LOW);
   };
+
 
 
 bool button_debounce = false;
@@ -213,7 +220,24 @@ void loop(){
   distancias();
   leer_huella();
 
+  if (digitalRead(buttonPin) == LOW && button_debounce == false) {
+        Serial.println("Boton Apretado");
+        button_debounce = true; // toggle button debounce flag
+        digitalWrite(ledadd,HIGH);
+        delay(500);
+        digitalWrite(ledadd,LOW);
+        delay(500);
+        digitalWrite(ledadd,HIGH);
+        delay(500);
+        digitalWrite(ledadd,LOW);
+        add_huella();
+    }
 
+    if (digitalRead(buttonPin) == HIGH && button_debounce == true) { // this will prevent subsequent presses
+        button_debounce = false; 
+    }
+
+    
 
 
     
@@ -376,6 +400,19 @@ uint8_t getFingerprintEnroll() {
   }
 
   Serial.println("Remove finger");
+
+  digitalWrite(ledadd,HIGH);
+  delay(500);
+  digitalWrite(ledadd,LOW);
+  delay(500);
+  digitalWrite(ledadd,HIGH);
+  delay(500);
+  digitalWrite(ledadd,LOW);
+  delay(500);
+  digitalWrite(ledadd,HIGH);
+  delay(500);
+  digitalWrite(ledadd,LOW);
+  
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {

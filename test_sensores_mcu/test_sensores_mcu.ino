@@ -147,7 +147,7 @@ void distancias(){
 
   if(distancia_2 < 5.0 ){
     digitalWrite(rele, HIGH);
-    delay(1000);
+    delay(2000);
     digitalWrite(rele, LOW);
     delay(3000);
   }else{
@@ -318,15 +318,9 @@ uint8_t getFingerprintID() {
 
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID);
-  if(finger.fingerID < 10 && finger.fingerID > 0){
-    NodeMCU.println("h " +String(0)+String(0)+ String(finger.fingerID));   //enviaria el dato de la huella si detecta un match
-  }else if(finger.fingerID > 10 && finger.fingerID < 100){
-    NodeMCU.println("h " +String(0)+String(0)+ String(finger.fingerID));   //enviaria el dato de la huella si detecta un match
-  }else{
-    NodeMCU.println("h "+ finger.fingerID);   //enviaria el dato de la huella si detecta un match
-  }
-  
   Serial.print(" with confidence of "); Serial.println(finger.confidence);
+  Serial.print("olu");
+  
   temperatura_persona();
   return finger.fingerID;
 }
@@ -345,6 +339,8 @@ int getFingerprintIDez() {
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID);
   Serial.print(" with confidence of "); Serial.println(finger.confidence);
+  Serial.print("oli");
+  
   return finger.fingerID;
 }
 

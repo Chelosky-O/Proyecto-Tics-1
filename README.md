@@ -1,3 +1,3 @@
 # Sistema de Autorizacion Sanitario (SAS)
 
-Tecnologias: PHP, MySQL, HTML
+Tecnologias: CPP,PHP, MySQL, HTML

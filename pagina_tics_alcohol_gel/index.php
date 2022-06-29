@@ -13,7 +13,7 @@
 <body>
 	<iframe src="grafico_temperatura.php" id="myFrame" frameBorder="0"></iframe>
 <?php
-include("grafico_temperatura.php");
+//include("grafico_temperatura.php");
 ?>
 <br />
 <br />

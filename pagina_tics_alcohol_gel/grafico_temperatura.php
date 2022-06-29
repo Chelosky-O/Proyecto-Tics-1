@@ -6,9 +6,8 @@ require_once("conexion.php");
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <script type="text/javascript">
-            setTimeout('document.location.reload()',10000)//especificamos los milisegundos en que la página se recarga
+            setTimeout('document.location.reload()',5000)//especificamos los milisegundos en que la página se recarga
         </script>
-
         <script type="text/javascript" src="jquery.js"></script>
         <style type="text/css">
         ${demo.css}
@@ -17,7 +16,7 @@ require_once("conexion.php");
     $(function () {
         $('#container').highcharts({
             title: {
-                text: 'Reporte de temperatura de personas',
+                text: 'Reporte Numero de personas',
                 x: -20 //center
             },
             subtitle: {
@@ -25,13 +24,16 @@ require_once("conexion.php");
                 x: -20
             },
             xAxis: {
+                title: {
+                    text: 'hora'
+                },
                 categories: [
                 <?php
-                    $sql = " select fecha_hora from registro ";
+                    $sql = " select HOUR(fecha_hora) as fh,MINUTE(fecha_hora) as fm from registro GROUP BY HOUR(fecha_hora)";
                     $result = mysqli_query($connection, $sql);
                     while($registros = mysqli_fetch_array($result)){
                         ?>
-                            '<?php echo  $registros["fecha_hora"]?>',
+                            '<?php echo  $registros["fh"]?>',
                         <?php
                     }
                 ?>
@@ -39,7 +41,7 @@ require_once("conexion.php");
             },
             yAxis: {
                 title: {
-                    text: 'Valores del Arduino'
+                    text: 'Contador'
                 },
                 plotLines: [{
                     value: 0,
@@ -48,7 +50,7 @@ require_once("conexion.php");
                 }]
             },
             tooltip: {
-                valueSuffix: ' Arduino'
+                valueSuffix: ' Personas'
             },
             legend: {
                 layout: 'vertical',
@@ -57,16 +59,18 @@ require_once("conexion.php");
                 borderWidth: 0
             },
             series: [
-            {   name: 'Temperatura',
+            {   name: 'Numero de Personas',
                 data: [
                 <?php
-                    $query = " select temperatura from registro ";
+                    $query = "select count(*) as co, fecha_hora from registro group by HOUR(fecha_hora)";
                     $resultados = mysqli_query($connection, $query);
+                    
                     while($rows = mysqli_fetch_array($resultados)){
                         ?>
-                            <?php echo $rows["temperatura"]?>,
+                            <?php echo $rows["co"]?>,
                         <?php
                     }
+                    
                 ?>
                 ]
             }
